@@ -2,35 +2,47 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerActions : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     //this script is what the player can do. 
     [SerializeField]
     InputController controller;
     Rigidbody rb;
-   
-    
-
+    PlayerStats stats;
     ObjectShadow shadow;
 
     [SerializeField]
     bool grounded;
-
-
     MovementKey movement = MovementKey.none;
-    private void Awake()
+    List<ActionKey> activeactions = new List<ActionKey>();
+
+
+    [SerializeField]
+    float rawforce = 10f;
+
+    public void InitializePlayerActions(PlayerObject player)
     {
+        rb = player.GetComponent<Rigidbody>();
+        stats = player.GetComponent<PlayerStats>();
         rb = GetComponent<Rigidbody>();
         shadow = GetComponent<ObjectShadow>();
         activeactions.Add(ActionKey.none);
     }
 
+    private void Awake()
+    {
+
+    }
+
 
     //get this thing out of here
-    public float speed = 6f;
-    public float turnsmoothtime = 0.1f;
+    [Tooltip("camera settings")]
+    [SerializeField]
+    float turnsmoothtime = 0.1f;
+    [SerializeField]
     float turnsmoothvelocity;
-    public Transform cam;
+    [SerializeField]
+    Transform cam;
 
     Vector3 finalmovement = new Vector3(0, 0, 0);
     void MoveCamera()
@@ -67,9 +79,9 @@ public class PlayerActions : MonoBehaviour
         InputController.PlayerActionInputEvent -= PlayerAction;
     }
 
-    void GroundedChange(bool isgrounded) 
+    void GroundedChange(bool isgrounded)
     {
-    grounded = isgrounded; 
+        grounded = isgrounded;
     }
 
     // Update is called once per frame
@@ -77,21 +89,19 @@ public class PlayerActions : MonoBehaviour
     private void Update()
     {
         MoveCamera();
+        SpinBall();
+        PlayerAbility();
     }
 
     private void FixedUpdate()
     {
-        SpinBall();
-        PlayerAbility();
+
     }
 
     //direction and speed of the movement. +
     //get direction from camera
     Vector3 direction = new Vector3();
-    [SerializeField]
-    float spinforce = 100f;
-    [SerializeField]
-    float rawforce = 10f;
+
 
     //get input from player
     void Moveball(MovementKey key)
@@ -137,7 +147,7 @@ public class PlayerActions : MonoBehaviour
 
     }
 
-    List<ActionKey> activeactions = new List<ActionKey>();
+
     void PlayerAction(ActionKey key)
     {
 
@@ -180,7 +190,7 @@ public class PlayerActions : MonoBehaviour
 
         if (movement != MovementKey.none && movement != MovementKey.neutral)
         {
-            rb.AddTorque(frontVector * spinforce, ForceMode.Acceleration);
+            rb.AddTorque(frontVector * stats.Rotationpower, ForceMode.Acceleration);
             rb.angularVelocity *= 0.95f;
         }
 
@@ -193,14 +203,10 @@ public class PlayerActions : MonoBehaviour
         rb.AddForce(finalmovement * rawforce, ForceMode.VelocityChange);
     }
 
-    void Jump() 
+    void Jump()
     {
         rb.AddForce(new Vector3(0, 10, 0), ForceMode.VelocityChange);
         Debug.Log("jump");
     }
 
-  
-
-
-  
 }
