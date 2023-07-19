@@ -43,7 +43,8 @@ public class ObjectShadow : MonoBehaviour
     [SerializeField]
     float minimumDistance = 1f;
 
-    public event EventHandler<GroundedEventArgs> groundedEvent;
+    public delegate void ObjectGroundedEventHandler(bool isgrounded);
+    public event ObjectGroundedEventHandler objectGroundedEvent;
 
     private void Start()
     {
@@ -80,7 +81,7 @@ public class ObjectShadow : MonoBehaviour
                 if (!isGrounded) //if it was not grounded before
                 {
                     isGrounded = true;
-                    groundedEvent?.Invoke(this, new GroundedEventArgs { IsGrounded = isGrounded });
+                    objectGroundedEvent?.Invoke(isGrounded);
                 }
 
             }
@@ -89,7 +90,7 @@ public class ObjectShadow : MonoBehaviour
                 if (isGrounded) //if it was grounded before
                 {
                     isGrounded = false;
-                    groundedEvent?.Invoke(this, new GroundedEventArgs { IsGrounded = isGrounded });
+                    objectGroundedEvent?.Invoke(isGrounded);
                 }
                 isGrounded = false;
             }
@@ -100,7 +101,7 @@ public class ObjectShadow : MonoBehaviour
             if (isGrounded) //if grounded before
             {
                 isGrounded = false;
-                groundedEvent?.Invoke(this, new GroundedEventArgs { IsGrounded = isGrounded });
+                objectGroundedEvent?.Invoke(isGrounded);
             }
             //disable shadow when on void
             shadow.SetActive(false);
@@ -152,7 +153,3 @@ public class ObjectShadow : MonoBehaviour
 
 }
 
-public class GroundedEventArgs : EventArgs
-{
-    public bool IsGrounded { get; set; }
-}

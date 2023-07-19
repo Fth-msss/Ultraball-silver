@@ -8,16 +8,19 @@ public class PlayerActions : MonoBehaviour
     [SerializeField]
     InputController controller;
     Rigidbody rb;
-    CharacterController controller2;
+   
+    
 
     ObjectShadow shadow;
+
+    [SerializeField]
+    bool grounded;
 
 
     MovementKey movement = MovementKey.none;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        controller2 = GetComponent<CharacterController>();
         shadow = GetComponent<ObjectShadow>();
         activeactions.Add(ActionKey.none);
     }
@@ -30,7 +33,7 @@ public class PlayerActions : MonoBehaviour
     public Transform cam;
 
     Vector3 finalmovement = new Vector3(0, 0, 0);
-    void TestCameraMovement()
+    void MoveCamera()
     {
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
@@ -55,6 +58,7 @@ public class PlayerActions : MonoBehaviour
     {
         InputController.PlayerMovementInputEvent += Moveball;
         InputController.PlayerActionInputEvent += PlayerAction;
+        shadow.objectGroundedEvent += GroundedChange;
     }
 
     private void OnDisable()
@@ -63,11 +67,16 @@ public class PlayerActions : MonoBehaviour
         InputController.PlayerActionInputEvent -= PlayerAction;
     }
 
+    void GroundedChange(bool isgrounded) 
+    {
+    grounded = isgrounded; 
+    }
+
     // Update is called once per frame
 
     private void Update()
     {
-        TestCameraMovement();
+        MoveCamera();
     }
 
     private void FixedUpdate()
@@ -147,12 +156,10 @@ public class PlayerActions : MonoBehaviour
             {
                 case ActionKey.jump:
 
-                    if (shadow.isGrounded)
+                    if (grounded)
                     {
-                        rb.AddForce(new Vector3(0, 10, 0), ForceMode.VelocityChange);
-                        Debug.Log("jump");
+                        Jump();
                     }
-
                     break;
                 case ActionKey.dash:
                     Dash();
@@ -166,21 +173,15 @@ public class PlayerActions : MonoBehaviour
     }
     void SpinBall()
     {
-        //turns out applying torque makes things go sideways
+        //turns out applying torque makes things go sideways..?
 
         Vector3 frontVector = Quaternion.Euler(0f, 90f, 0f) * finalmovement;
 
 
         if (movement != MovementKey.none && movement != MovementKey.neutral)
         {
-            //Debug.Log(finalmovement);
             rb.AddTorque(frontVector * spinforce, ForceMode.Acceleration);
             rb.angularVelocity *= 0.95f;
-            //
-            //
-
-            //also add some raw force
-            rb.AddForce(finalmovement * rawforce, ForceMode.Acceleration);
         }
 
 
@@ -192,33 +193,14 @@ public class PlayerActions : MonoBehaviour
         rb.AddForce(finalmovement * rawforce, ForceMode.VelocityChange);
     }
 
-    public delegate void PlayerPickupsEventHandler(Pickup pickup);
-    public event PlayerPickupsEventHandler PlayerPickupEvent;
-
-
-    public void Interact(Interactables interact)
+    void Jump() 
     {
-
-
-        if (interact is Pickup pickup)
-        {
-            if (pickup.Type == pickuptype.gem)
-            {
-
-                pickup.Disable();
-                //well, what now.
-                //this should go right into the counter in gamemanager
-                //since gems have nothing to do with the player,this does nothing
-                PlayerPickupEvent?.Invoke(pickup);
-
-            }//send this to gamemanager
-
-            if (pickup.Type == pickuptype.powerup)
-            {
-
-            }//if powerup is empty,add this. else, 0
-
-            //PlayerPickupEvent?.Invoke(pickup);
-        }
+        rb.AddForce(new Vector3(0, 10, 0), ForceMode.VelocityChange);
+        Debug.Log("jump");
     }
+
+  
+
+
+  
 }
