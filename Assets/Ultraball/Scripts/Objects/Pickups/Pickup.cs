@@ -31,7 +31,7 @@ public class Pickup : Interactables
         {
             if (interactable)
             {
-                other.GetComponent<PlayerActions>().Interact(this);
+                other.GetComponent<PlayerObject>().Interact(this);
             }
 
 

@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour
         SetConditions();
 
         //spawn player at position
-        Player.GetComponent<PlayerActions>().PlayerPickupEvent += IncreaseObjectiveValue;
+        Player.GetComponent<PlayerObject>().PlayerPickupEvent += IncreaseObjectiveValue;
 
     }
 
