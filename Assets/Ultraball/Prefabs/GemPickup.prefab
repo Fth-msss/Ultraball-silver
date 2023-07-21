@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7880091537314329401
 MeshFilter:
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7880091537313197881}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 425bdbc420e0837408e1f6cf2cbe089e, type: 3}
+  m_Script: {fileID: 11500000, guid: cbe85d83a8590db4d9578408b1eeca27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   interactable: 1
@@ -109,7 +109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7880091537313197881}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e58337fe8dd9564eb30b46d38f29e88, type: 3}
+  m_Script: {fileID: 11500000, guid: 4448db8ee85630649bd92c847df1cf37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotatespeed: {x: 0, y: 0, z: 1}
@@ -121,8 +121,16 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7880091537313197881}
   m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
   m_IsTrigger: 1
+  m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
+  serializedVersion: 3
   m_Size: {x: 2.22574, y: 2.1454473, z: 2.7146366}
   m_Center: {x: 0.024015108, y: -0.012209216, z: -0.35224128}
