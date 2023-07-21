@@ -10,8 +10,12 @@ public class NavmeshEnemy : MonoBehaviour
 {
     NavMeshAgent agent;
 
+    public NavMeshAgent Agent { get => agent; set => agent = value; }
+
     public void SetTargetLocation(Transform position) 
     {
-        agent.SetDestination(position.position);
+        Agent.SetDestination(position.position);
     }
+
+
 }
