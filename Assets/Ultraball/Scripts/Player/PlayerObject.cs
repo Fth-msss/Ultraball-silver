@@ -5,11 +5,18 @@ using UnityEngine;
 public class PlayerObject : MonoBehaviour
 {
     PlayerStats stats;
-    PlayerActions actions;
+    PlayerController actions;
     Rigidbody rb;
 
     public delegate void PlayerPickupsEventHandler(Pickup pickup);
     public event PlayerPickupsEventHandler PlayerPickupEvent;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        actions = GetComponent<PlayerController>();
+        stats = GetComponent<PlayerStats>();
+    }
 
 
     public void Interact(Interactables interact)
@@ -24,14 +31,22 @@ public class PlayerObject : MonoBehaviour
                 pickup.Disable();
                 PlayerPickupEvent?.Invoke(pickup);
 
-            }//send this to gamemanager
+            }
 
             if (pickup.Type == pickuptype.powerup)
             {
+                //pick powerups only if 
+                if (stats.HeldPickup != null) { pickup.Disable(); stats.HeldPickup = pickup; }
+                
+            }
 
-            }//if powerup is empty,add this. else, 0
-
-            //PlayerPickupEvent?.Invoke(pickup);
+          
         }
+    }
+
+   
+    public void AddExternalForce(Vector3 force) 
+    {
+    rb.AddForce(force);
     }
 }

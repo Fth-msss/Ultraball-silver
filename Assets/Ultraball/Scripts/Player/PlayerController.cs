@@ -20,18 +20,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     float rawforce = 10f;
 
-    public void InitializePlayerActions(PlayerObject player)
-    {
-        rb = player.GetComponent<Rigidbody>();
-        stats = player.GetComponent<PlayerStats>();
-        rb = GetComponent<Rigidbody>();
-        shadow = GetComponent<ObjectShadow>();
-        activeactions.Add(ActionKey.none);
-    }
 
     private void Awake()
     {
-
+        rb = GetComponent<Rigidbody>();
+        stats = GetComponent<PlayerStats>();
+        rb = GetComponent<Rigidbody>();
+        shadow = GetComponent<ObjectShadow>();
+        activeactions.Add(ActionKey.none);
     }
 
 
@@ -90,12 +86,12 @@ public class PlayerController : MonoBehaviour
     {
         MoveCamera();
         SpinBall();
-        PlayerAbility();
+       
     }
 
     private void FixedUpdate()
     {
-
+        PlayerAbility();
     }
 
     //direction and speed of the movement. +
@@ -147,7 +143,6 @@ public class PlayerController : MonoBehaviour
 
     }
 
-
     void PlayerAction(ActionKey key)
     {
 
@@ -156,7 +151,6 @@ public class PlayerController : MonoBehaviour
         Debug.Log("activeactions:" + activeactions[0]);
 
     }
-
 
     void PlayerAbility()
     {
@@ -181,6 +175,8 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+    //functions that actively affect player object
     void SpinBall()
     {
         //turns out applying torque makes things go sideways..?
